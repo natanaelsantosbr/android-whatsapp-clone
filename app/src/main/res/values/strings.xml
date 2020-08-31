@@ -4,4 +4,6 @@
     <string name="digite_senha">Digite sua senha</string>
     <string name="botao_logar">Logar</string>
     <string name="nao_tem_conta">Não tem conta? Cadastra-se</string>
+    <string name="digite_nome">Digite o seu nome</string>
+    <string name="botao_cadastrar">Cadastrar</string>
 </resources>
