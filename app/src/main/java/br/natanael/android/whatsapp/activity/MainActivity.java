@@ -1,8 +1,10 @@
-package br.natanael.android.whatsapp;
+package br.natanael.android.whatsapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import br.natanael.android.whatsapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

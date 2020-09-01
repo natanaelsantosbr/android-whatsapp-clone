@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".CadastroActivity">
+    tools:context=".activity.CadastroActivity">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_nome" />
@@ -50,6 +51,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_email"
@@ -70,6 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editSenha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/digite_senha"
@@ -90,6 +93,7 @@
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        android:onClick="cadastrarUsuario"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

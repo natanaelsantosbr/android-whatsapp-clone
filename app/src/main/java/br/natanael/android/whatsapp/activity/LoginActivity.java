@@ -1,10 +1,12 @@
-package br.natanael.android.whatsapp;
+package br.natanael.android.whatsapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import br.natanael.android.whatsapp.R;
 
 public class LoginActivity extends AppCompatActivity {
 
