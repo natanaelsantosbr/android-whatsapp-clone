@@ -1,6 +1,7 @@
 package br.natanael.android.whatsapp.infraestrutura.firebase.auth;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,41 +23,15 @@ public class ServicoExternoFirebaseAuth implements IServicoExternoFirebaseAuth {
     }
 
     @Override
-    public void CadastrarUsuarioComEmailESenha(final Activity activity, String email, String senha)
-    {
-        auth.createUserWithEmailAndPassword(email, senha)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful())
-                        {
-                            Toast.makeText(activity, "Sucesso ao cadastrar usuário!", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            String excecao = "";
+    public Task<AuthResult> CadastrarUsuarioComEmailESenha(final Activity activity, String email, String senha) {
 
-                            try{
-                                throw task.getException();
-                            }
-                            catch (FirebaseAuthWeakPasswordException e){
-                                excecao = "Digite uma senha mais forte!";
-                            }
-                            catch (FirebaseAuthInvalidCredentialsException e)
-                            {
-                                excecao = "Por favor, digite um e-mail válido";
-                            }
-                            catch (FirebaseAuthUserCollisionException e)
-                            {
-                                excecao = "Esta conta já foi cadastrada";
-                            }
-                            catch (Exception e)
-                            {
-                                excecao = "Erro ao cadastrar usuário: " + e.getMessage();
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                });
+        Task<AuthResult> retorno = auth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.i("TAG", "Sucesso");
+            }
+        });
+
+        return retorno;
     }
 }

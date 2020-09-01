@@ -100,6 +100,8 @@ public class CadastroActivity extends AppCompatActivity {
                             return excecao;
                         }
                     });
+
+
         }
     }
 }

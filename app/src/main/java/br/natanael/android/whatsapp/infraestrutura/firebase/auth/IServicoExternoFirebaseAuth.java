@@ -2,6 +2,9 @@ package br.natanael.android.whatsapp.infraestrutura.firebase.auth;
 
 import android.app.Activity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+
 public interface IServicoExternoFirebaseAuth {
-    void CadastrarUsuarioComEmailESenha(Activity activity, String email, String senha);
+    Task<AuthResult> CadastrarUsuarioComEmailESenha(Activity activity, String email, String senha);
 }
