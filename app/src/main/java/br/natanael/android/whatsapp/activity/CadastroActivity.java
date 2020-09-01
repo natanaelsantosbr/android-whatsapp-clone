@@ -17,11 +17,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.natanael.android.whatsapp.R;
-import br.natanael.android.whatsapp.aplicacao.usuarios.IServicoDeGestaoDeUsuarios;
-import br.natanael.android.whatsapp.aplicacao.usuarios.ServicoDeGestaoDeUsuarios;
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.infraestrutura.firebase.auth.IServicoExternoFirebaseAuth;
-import br.natanael.android.whatsapp.infraestrutura.firebase.auth.ServicoExternoFirebaseAuth;
 import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -38,8 +34,8 @@ public class CadastroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro);
 
         campoNome = findViewById(R.id.editNome);
-        campoEmail = findViewById(R.id.editEmail);
-        campoSenha = findViewById(R.id.editSenha);
+        campoEmail = findViewById(R.id.editLoginEmail);
+        campoSenha = findViewById(R.id.editLoginSenha);
     }
 
     public void cadastrarUsuario(View view)
@@ -89,6 +85,7 @@ public class CadastroActivity extends AppCompatActivity {
                                 excecao = "Por favor, digite um e-mail válido";
                             }
                             catch (FirebaseAuthUserCollisionException e)
+
                             {
                                 excecao = "Esta conta já foi cadastrada";
                             }

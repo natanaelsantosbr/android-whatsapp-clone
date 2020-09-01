@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.infraestrutura.firebase.auth;
+package br.natanael.android.whatsapp.infra.firebase.auth;
 
 import android.app.Activity;
 
