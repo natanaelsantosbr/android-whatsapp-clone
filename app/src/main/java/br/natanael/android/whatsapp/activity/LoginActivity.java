@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
 
 import br.natanael.android.whatsapp.R;
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
@@ -105,5 +106,18 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void abrirTelaPrincipal() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+        FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
+
+        if(usuarioAtual != null)
+            abrirTelaPrincipal();
+
+
     }
 }
