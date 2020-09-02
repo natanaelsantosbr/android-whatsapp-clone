@@ -6,4 +6,7 @@
     <string name="nao_tem_conta">Não tem conta? Cadastra-se</string>
     <string name="digite_nome">Digite o seu nome</string>
     <string name="botao_cadastrar">Cadastrar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
