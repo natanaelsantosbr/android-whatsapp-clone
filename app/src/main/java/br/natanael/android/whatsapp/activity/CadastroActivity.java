@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.natanael.android.whatsapp.R;
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.helper.Base64Custom;
 import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class CadastroActivity extends AppCompatActivity {
         String textoEmail = campoEmail.getText().toString();
         String textoSenha = campoSenha.getText().toString();
 
-        ModeloDeCadastroDeUsuario modelo = new ModeloDeCadastroDeUsuario(textoNome, textoEmail, textoSenha);
+        final ModeloDeCadastroDeUsuario modelo = new ModeloDeCadastroDeUsuario(textoNome, textoEmail, textoSenha);
 
         if(modelo == null)
             Toast.makeText(CadastroActivity.this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
@@ -58,8 +59,20 @@ public class CadastroActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
-                                Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuário!", Toast.LENGTH_SHORT).show();
-                                finish();
+                                try {
+                                    String id = Base64Custom.codificar(modelo.getEmail());
+                                    modelo.setId(id);
+                                    modelo.salvar();
+
+                                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuário!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+
+
                             }
                             else
                             {

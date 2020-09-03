@@ -118,6 +118,5 @@ public class LoginActivity extends AppCompatActivity {
         if(usuarioAtual != null)
             abrirTelaPrincipal();
 
-
     }
 }
