@@ -7,32 +7,71 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.ImageButton;
 
 import java.io.BufferedInputStream;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.config.ConfiguracaoRequestCode;
 import br.natanael.android.whatsapp.helper.Permissao;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
 
-    private String[] permissoesNecessarias = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-    };
+    private ImageButton imageButtonCamera;
+    private ImageButton imageButtonGaleria;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracoes);
 
+        prepararProcessamentoDaActivity();
+    }
+
+    private void prepararProcessamentoDaActivity() {
+
+        configurarFindViewById();
+
         criarPermissoes();
 
         criarToolbar();
+
+        abrirCamera();
+    }
+
+    private void abrirCamera() {
+        imageButtonCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ir = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                if(ir.resolveActivity(getPackageManager()) != null)
+                {
+                    startActivityForResult(ir, ConfiguracaoRequestCode.SELECAO_CAMERA);
+                }
+            }
+        });
+    }
+
+    private void configurarFindViewById() {
+        imageButtonCamera = findViewById(R.id.imageButtonCamera);
+        imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
     }
 
     private void criarPermissoes() {
+        String[] permissoesNecessarias = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        };
+
         Permissao.validar(permissoesNecessarias, this, 1);
     }
 

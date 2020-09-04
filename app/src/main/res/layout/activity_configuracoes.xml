@@ -77,5 +77,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
+    <ImageButton
+        android:id="@+id/imageButtonGaleria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintEnd_toEndOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintTop_toTopOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_foto_cinza_24dp" />
+
+    <ImageButton
+        android:id="@+id/imageButtonCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonGaleria"
+        app:layout_constraintStart_toStartOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintTop_toTopOf="@+id/circleImageViewFotoPerfil"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_camera_cinza_24dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
