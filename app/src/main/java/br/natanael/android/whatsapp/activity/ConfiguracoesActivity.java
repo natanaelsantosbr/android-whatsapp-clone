@@ -14,13 +14,25 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.config.ConfiguracaoRequestCode;
+import br.natanael.android.whatsapp.helper.Base64Custom;
 import br.natanael.android.whatsapp.helper.Permissao;
+import br.natanael.android.whatsapp.helper.UsuarioFirebase;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
@@ -28,6 +40,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private ImageButton imageButtonCamera;
     private ImageButton imageButtonGaleria;
     private CircleImageView circleImageViewPerfil;
+
+    private StorageReference storageReference;
+    private String identificadorUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +54,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private void prepararProcessamentoDaActivity() {
 
+        inicializarVariaveis();
         configurarFindViewById();
         criarPermissoes();
         criarToolbar();
         abrirEventosDeCliques();
+    }
+
+    private void inicializarVariaveis() {
+        storageReference =  ConfiguracaoFirebase.getFirebaseStorage();
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
     }
 
     private void configurarFindViewById() {
@@ -126,21 +147,45 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         {
             Bitmap imagem = null;
 
-            try
-            {
-                switch (requestCode)
-                {
+            try {
+                switch (requestCode) {
                     case ConfiguracaoRequestCode.SELECAO_CAMERA:
                         imagem = (Bitmap) data.getExtras().get("data");
                         break;
-                    case  ConfiguracaoRequestCode.SELECAO_GALERIA:
+                    case ConfiguracaoRequestCode.SELECAO_GALERIA:
                         Uri localDaImagemSelecionada = data.getData();
-                        imagem = MediaStore.Images.Media.getBitmap(getContentResolver(), localDaImagemSelecionada );
+                        imagem = MediaStore.Images.Media.getBitmap(getContentResolver(), localDaImagemSelecionada);
 
                         break;
                 }
-                circleImageViewPerfil.setImageBitmap(imagem);
 
+                if (imagem != null) {
+
+                    circleImageViewPerfil.setImageBitmap(imagem);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 70,baos);
+                    byte[] dadosDaImagem = baos.toByteArray();
+
+                    StorageReference imagemRef = storageReference
+                            .child("imagens")
+                            .child("perfil")
+                            .child(identificadorUsuario + "perfil.jpeg");
+
+
+                    UploadTask uploadTask = imagemRef.putBytes(dadosDaImagem);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ConfiguracoesActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(ConfiguracoesActivity.this, "Sucesso ao fazder upload da imagem", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
             catch (Exception e)
             {
