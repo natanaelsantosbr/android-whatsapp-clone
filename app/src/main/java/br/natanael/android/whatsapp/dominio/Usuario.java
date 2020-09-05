@@ -5,6 +5,17 @@ public class Usuario {
     private String email;
     private String senha;
 
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    private String foto;
+
+
     public Usuario() {
     }
 
@@ -36,5 +47,9 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public void atualizar(String nome) {
+        this.setNome(nome);
     }
 }

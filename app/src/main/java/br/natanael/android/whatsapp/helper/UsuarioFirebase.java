@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.dominio.Usuario;
 
 public class UsuarioFirebase {
 
@@ -83,4 +84,20 @@ public class UsuarioFirebase {
             return  false;
         }
     }
+
+    public static Usuario getDadosUsuarioLogado() {
+        FirebaseUser auth = getUsuarioAtual();
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(auth.getEmail());
+        usuario.setNome(auth.getDisplayName());
+
+        if(auth.getPhotoUrl() == null)
+            usuario.setFoto("");
+        else
+            usuario.setFoto(auth.getPhotoUrl().toString());
+
+        return usuario;
+    }
+
 }

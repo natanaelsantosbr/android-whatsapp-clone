@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -34,13 +35,21 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.aplicacao.usuarios.IServicoDeGestaoDeUsuarios;
+import br.natanael.android.whatsapp.aplicacao.usuarios.ServicoDeGestaoDeUsuarios;
+import br.natanael.android.whatsapp.aplicacao.usuarios.onDataReceiveUsuarioCallback;
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.config.ConfiguracaoRequestCode;
+import br.natanael.android.whatsapp.dominio.Usuario;
 import br.natanael.android.whatsapp.helper.Base64Custom;
 import br.natanael.android.whatsapp.helper.Permissao;
 import br.natanael.android.whatsapp.helper.UsuarioFirebase;
+import br.natanael.android.whatsapp.model.autenticacao.ModeloDeCadastroDeAutenticacao;
+import br.natanael.android.whatsapp.model.usuarios.ModeloDeAtualizacaoDeUsuario;
+import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
@@ -51,10 +60,13 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
     private String identificadorUsuario;
-
-    private FirebaseUser usuarioLogado;
-
+    private Usuario usuarioLogado;
     private EditText editTextNome;
+    private ImageView imageViewNomeDoUsuario;
+
+
+    private IServicoDeGestaoDeUsuarios _servicoDeGestaoDeUsuarios;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,33 +78,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private void prepararProcessamentoDaActivity() {
         configurarFindViewById();
-
-        inicializarVariaveis();
         criarPermissoes();
+        inicializarVariaveis();
         criarToolbar();
         abrirEventosDeCliques();
-    }
-
-    private void inicializarVariaveis() {
-        storageReference =  ConfiguracaoFirebase.getFirebaseStorage();
-        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
-        usuarioLogado = UsuarioFirebase.getUsuarioAtual();
-
-        Uri url = usuarioLogado.getPhotoUrl();
-        if(url != null)
-        {
-            Glide.with(getApplicationContext())
-                    .load(url)
-                    .into(circleImageViewPerfil);
-        }
-        else
-        {
-            circleImageViewPerfil.setImageResource(R.drawable.padrao);
-        }
-
-        String nomeDoUsuario = usuarioLogado.getDisplayName();
-        editTextNome.setText(nomeDoUsuario);
-
     }
 
     private void configurarFindViewById() {
@@ -100,6 +89,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
         circleImageViewPerfil = findViewById(R.id.circleImageViewFotoPerfil);
         editTextNome = findViewById(R.id.editTextNome);
+        imageViewNomeDoUsuario = findViewById(R.id.imageViewNomeDoUsuario);
     }
 
     private void criarPermissoes() {
@@ -110,6 +100,36 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         Permissao.validar(permissoesNecessarias, this, 1);
     }
+
+    private void inicializarVariaveis() {
+        _servicoDeGestaoDeUsuarios = new ServicoDeGestaoDeUsuarios();
+
+        storageReference =  ConfiguracaoFirebase.getFirebaseStorage();
+        identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
+
+        preencherVariaveis();
+
+    }
+
+    private void preencherVariaveis() {
+
+        if(!usuarioLogado.getFoto().isEmpty())
+        {
+            Uri url = Uri.parse(usuarioLogado.getFoto());
+            Glide.with(getApplicationContext())
+                    .load(url)
+                    .into(circleImageViewPerfil);
+        }
+        else
+            circleImageViewPerfil.setImageResource(R.drawable.padrao);
+
+
+        editTextNome.setText(usuarioLogado.getNome());
+    }
+
+
+
 
     private void criarToolbar() {
 
@@ -124,6 +144,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private void abrirEventosDeCliques() {
         abrirCamera();
         abrirGaleria();
+        salvarNomeDoUsuario();
     }
 
     private void abrirCamera() {
@@ -150,6 +171,49 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 if(ir.resolveActivity(getPackageManager()) != null)
                 {
                     startActivityForResult(ir, ConfiguracaoRequestCode.SELECAO_GALERIA);
+                }
+            }
+        });
+    }
+
+    private void salvarNomeDoUsuario() {
+        imageViewNomeDoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nome  = editTextNome.getText().toString();
+                boolean retorno = UsuarioFirebase.atualizarNomeUsuario(nome);
+
+                if(retorno){
+                    {
+                        final String id = UsuarioFirebase.getIdentificadorUsuario();
+                        _servicoDeGestaoDeUsuarios.buscarUsuarioPorIdIdentificador(id, new onDataReceiveUsuarioCallback() {
+                            @Override
+                            public void onDataReceived(Usuario usuario) {
+                                //Toast.makeText(ConfiguracoesActivity.this, usuario.getNome(), Toast.LENGTH_SHORT).show();
+                                editTextNome.setText(usuario.getNome());
+                                usuario.setNome("fdp");
+
+
+
+                                _servicoDeGestaoDeUsuarios.atualizarUsuario(id, usuario, new onDataReceiveUsuarioCallback() {
+                                    @Override
+                                    public void onDataReceived(Usuario usuario) {
+                                        editTextNome.setText("2");
+                                    }
+
+                                    @Override
+                                    public void onSucesso(boolean retorno) {
+                                        editTextNome.setText("3");
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onSucesso(boolean retorno) {
+
+                            }
+                        });
+                    }
                 }
             }
         });
