@@ -16,12 +16,20 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -44,6 +52,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private String identificadorUsuario;
 
+    private FirebaseUser usuarioLogado;
+
+    private EditText editTextNome;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +65,9 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     }
 
     private void prepararProcessamentoDaActivity() {
+        configurarFindViewById();
 
         inicializarVariaveis();
-        configurarFindViewById();
         criarPermissoes();
         criarToolbar();
         abrirEventosDeCliques();
@@ -64,12 +76,30 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private void inicializarVariaveis() {
         storageReference =  ConfiguracaoFirebase.getFirebaseStorage();
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
+        usuarioLogado = UsuarioFirebase.getUsuarioAtual();
+
+        Uri url = usuarioLogado.getPhotoUrl();
+        if(url != null)
+        {
+            Glide.with(getApplicationContext())
+                    .load(url)
+                    .into(circleImageViewPerfil);
+        }
+        else
+        {
+            circleImageViewPerfil.setImageResource(R.drawable.padrao);
+        }
+
+        String nomeDoUsuario = usuarioLogado.getDisplayName();
+        editTextNome.setText(nomeDoUsuario);
+
     }
 
     private void configurarFindViewById() {
         imageButtonCamera = findViewById(R.id.imageButtonCamera);
         imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
         circleImageViewPerfil = findViewById(R.id.circleImageViewFotoPerfil);
+        editTextNome = findViewById(R.id.editTextNome);
     }
 
     private void criarPermissoes() {
@@ -160,20 +190,20 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 }
 
                 if (imagem != null) {
-
                     circleImageViewPerfil.setImageBitmap(imagem);
 
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imagem.compress(Bitmap.CompressFormat.JPEG, 70,baos);
                     byte[] dadosDaImagem = baos.toByteArray();
 
-                    StorageReference imagemRef = storageReference
+                    final StorageReference imagemRef = storageReference
                             .child("imagens")
                             .child("perfil")
                             .child(identificadorUsuario + "perfil.jpeg");
 
 
                     UploadTask uploadTask = imagemRef.putBytes(dadosDaImagem);
+
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -182,7 +212,18 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(ConfiguracoesActivity.this, "Sucesso ao fazder upload da imagem", Toast.LENGTH_SHORT).show();
+
+
+                            imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    Uri url = task.getResult();
+
+                                    atualizaFotoUsuario(url);
+
+                                    Toast.makeText(ConfiguracoesActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
                 }
@@ -192,6 +233,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void atualizaFotoUsuario(Uri url) {
+        UsuarioFirebase.atualizarFotoUsuario(url);
     }
 
     private void alertaValidacaoPermissao() {
