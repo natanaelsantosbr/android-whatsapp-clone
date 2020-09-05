@@ -14,7 +14,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+
+import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.dominio.Usuario;
+import br.natanael.android.whatsapp.infra.firebase.repositorio.usuario.callbacks.OnSucessoAoCadastrarUsuario;
 
 public class RepositorioDeUsuarios implements  IRepositorioDeUsuarios {
 
@@ -22,6 +25,13 @@ public class RepositorioDeUsuarios implements  IRepositorioDeUsuarios {
 
     public RepositorioDeUsuarios() {
         _database = FirebaseDatabase.getInstance();
+    }
+
+
+    @Override
+    public void cadastrar(Usuario usuario) {
+        DatabaseReference usuarioRef = _database.getReference("usuarios").child(usuario.getId());
+        usuarioRef.setValue(usuario);
     }
 
     @Override

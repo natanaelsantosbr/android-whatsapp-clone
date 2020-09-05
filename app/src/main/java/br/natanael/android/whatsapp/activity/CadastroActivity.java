@@ -17,12 +17,15 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.aplicacao.usuarios.IServicoDeGestaoDeUsuarios;
+import br.natanael.android.whatsapp.aplicacao.usuarios.ServicoDeGestaoDeUsuarios;
 import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.dominio.Usuario;
 import br.natanael.android.whatsapp.helper.Base64Custom;
 import br.natanael.android.whatsapp.helper.UsuarioFirebase;
 import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
 
-public class CadastroActivity extends AppCompatActivity {
+public class CadastroActivity extends AppCompatActivity  {
 
     private TextInputEditText campoNome;
     private TextInputEditText campoEmail;
@@ -30,11 +33,23 @@ public class CadastroActivity extends AppCompatActivity {
 
     private FirebaseAuth autenticacao;
 
+    private IServicoDeGestaoDeUsuarios _servicoDeGestaoDeUsuarios;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
+        configurarFindViewById();
+
+        inicializarVariaveis();
+    }
+
+    private void inicializarVariaveis() {
+        _servicoDeGestaoDeUsuarios = new ServicoDeGestaoDeUsuarios();
+    }
+
+    private void configurarFindViewById() {
         campoNome = findViewById(R.id.editNome);
         campoEmail = findViewById(R.id.editLoginEmail);
         campoSenha = findViewById(R.id.editLoginSenha);
@@ -61,13 +76,12 @@ public class CadastroActivity extends AppCompatActivity {
                             if(task.isSuccessful())
                             {
                                 try {
-                                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuário!", Toast.LENGTH_SHORT).show();
 
-                                    String id = Base64Custom.codificar(modelo.getEmail());
-                                    modelo.setId(id);
-                                    modelo.salvar();
+                                    _servicoDeGestaoDeUsuarios.cadastrar(modelo);
 
                                     UsuarioFirebase.atualizarNomeUsuario(modelo.getNome());
+
+                                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuário! 111111111111", Toast.LENGTH_SHORT).show();
 
                                     finish();
                                 }

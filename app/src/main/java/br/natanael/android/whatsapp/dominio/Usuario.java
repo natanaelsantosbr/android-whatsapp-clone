@@ -1,9 +1,18 @@
 package br.natanael.android.whatsapp.dominio;
 
 public class Usuario {
+    private String id;
     private String nome;
     private String email;
     private String senha;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFoto() {
         return foto;
@@ -15,14 +24,13 @@ public class Usuario {
 
     private String foto;
 
-
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String senha) {
+    public Usuario(String id, String nome, String email) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
     }
 
     public String getNome() {
