@@ -146,10 +146,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent ir = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(ir, ConfiguracaoRequestCode.SELECAO_CAMERA);
 
                 if(ir.resolveActivity(getPackageManager()) != null)
                 {
+                    startActivityForResult(ir, ConfiguracaoRequestCode.SELECAO_CAMERA);
 
                 }
             }
