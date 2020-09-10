@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.config;
+package br.natanael.android.whatsapp.aplicacao.config;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

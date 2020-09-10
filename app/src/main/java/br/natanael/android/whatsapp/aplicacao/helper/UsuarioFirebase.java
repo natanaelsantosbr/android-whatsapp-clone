@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.helper;
+package br.natanael.android.whatsapp.aplicacao.helper;
 
 import android.net.Uri;
 import android.util.Log;
@@ -11,7 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 import br.natanael.android.whatsapp.dominio.Usuario;
 
 public class UsuarioFirebase {
@@ -85,10 +86,10 @@ public class UsuarioFirebase {
         }
     }
 
-    public static Usuario getDadosUsuarioLogado() {
+    public static ModeloDeCadastroDeUsuario getDadosUsuarioLogado() {
         FirebaseUser auth = getUsuarioAtual();
 
-        Usuario usuario = new Usuario();
+        ModeloDeCadastroDeUsuario usuario = new ModeloDeCadastroDeUsuario();
         usuario.setEmail(auth.getEmail());
         usuario.setNome(auth.getDisplayName());
 

@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.fragment;
+package br.natanael.android.whatsapp.activity.fragment;
 
 
 import android.os.Bundle;

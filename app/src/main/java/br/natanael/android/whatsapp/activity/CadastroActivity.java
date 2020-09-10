@@ -17,13 +17,13 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.aplicacao.helper.Base64Custom;
 import br.natanael.android.whatsapp.aplicacao.usuarios.IServicoDeGestaoDeUsuarios;
 import br.natanael.android.whatsapp.aplicacao.usuarios.ServicoDeGestaoDeUsuarios;
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.dominio.Usuario;
-import br.natanael.android.whatsapp.helper.Base64Custom;
-import br.natanael.android.whatsapp.helper.UsuarioFirebase;
-import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
+import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
+import br.natanael.android.whatsapp.aplicacao.usuarios.callbacks.OnSucessoAoCadastrarUsuario;
 
 public class CadastroActivity extends AppCompatActivity  {
 
@@ -41,18 +41,17 @@ public class CadastroActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_cadastro);
 
         configurarFindViewById();
-
         inicializarVariaveis();
-    }
-
-    private void inicializarVariaveis() {
-        _servicoDeGestaoDeUsuarios = new ServicoDeGestaoDeUsuarios();
     }
 
     private void configurarFindViewById() {
         campoNome = findViewById(R.id.editNome);
         campoEmail = findViewById(R.id.editLoginEmail);
         campoSenha = findViewById(R.id.editLoginSenha);
+    }
+
+    private void inicializarVariaveis() {
+        _servicoDeGestaoDeUsuarios = new ServicoDeGestaoDeUsuarios();
     }
 
     public void cadastrarUsuario(View view)
@@ -75,22 +74,21 @@ public class CadastroActivity extends AppCompatActivity  {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
+                                Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuario", Toast.LENGTH_SHORT).show();
+                                UsuarioFirebase.atualizarNomeUsuario((modelo.getNome()));
+                                finish();
+
                                 try {
+                                    String identificador = Base64Custom.codificar(modelo.getEmail());
+                                    modelo.setId(identificador);
 
-                                    _servicoDeGestaoDeUsuarios.cadastrar(modelo);
+                                    modelo.salvar();
 
-                                    UsuarioFirebase.atualizarNomeUsuario(modelo.getNome());
-
-                                    Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuário! 111111111111", Toast.LENGTH_SHORT).show();
-
-                                    finish();
                                 }
                                 catch (Exception e)
                                 {
                                     e.printStackTrace();
                                 }
-
-
                             }
                             else
                             {
@@ -128,8 +126,6 @@ public class CadastroActivity extends AppCompatActivity  {
                             return excecao;
                         }
                     });
-
-
         }
     }
 }

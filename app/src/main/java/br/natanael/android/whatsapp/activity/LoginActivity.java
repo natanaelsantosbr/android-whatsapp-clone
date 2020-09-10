@@ -2,11 +2,9 @@ package br.natanael.android.whatsapp.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.natanael.android.whatsapp.R;
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 
 public class LoginActivity extends AppCompatActivity {
 

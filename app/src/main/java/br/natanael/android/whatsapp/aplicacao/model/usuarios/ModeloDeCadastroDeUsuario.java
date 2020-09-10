@@ -1,11 +1,11 @@
-package br.natanael.android.whatsapp.model.usuarios;
+package br.natanael.android.whatsapp.aplicacao.model.usuarios;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import java.util.HashMap;
 import java.util.Map;
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.helper.UsuarioFirebase;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
 
 public class ModeloDeCadastroDeUsuario {
     private String id;
@@ -29,6 +29,9 @@ public class ModeloDeCadastroDeUsuario {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ModeloDeCadastroDeUsuario() {
     }
 
     public ModeloDeCadastroDeUsuario(String nome, String email, String senha){
@@ -73,8 +76,9 @@ public class ModeloDeCadastroDeUsuario {
 
     public void salvar() {
         DatabaseReference firebase = ConfiguracaoFirebase.getDatabaseReference();
+        DatabaseReference usuario = firebase.child("usuarios");
 
-        DatabaseReference usuario = firebase.child("usuarios").child(getId());
+        usuario.child(getId());
 
         usuario.setValue(this);
     }

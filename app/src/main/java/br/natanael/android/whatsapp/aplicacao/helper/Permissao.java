@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.helper;
+package br.natanael.android.whatsapp.aplicacao.helper;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;

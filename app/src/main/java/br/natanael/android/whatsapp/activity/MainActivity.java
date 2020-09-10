@@ -17,9 +17,9 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 import br.natanael.android.whatsapp.R;
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.fragment.ContatosFragment;
-import br.natanael.android.whatsapp.fragment.ConversasFragment;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.activity.fragment.ContatosFragment;
+import br.natanael.android.whatsapp.activity.fragment.ConversasFragment;
 
 
 public class MainActivity extends AppCompatActivity {

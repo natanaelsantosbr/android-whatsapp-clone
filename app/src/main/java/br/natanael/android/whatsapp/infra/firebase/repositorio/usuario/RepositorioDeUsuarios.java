@@ -1,8 +1,5 @@
 package br.natanael.android.whatsapp.infra.firebase.repositorio.usuario;
 
-import android.nfc.Tag;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -15,9 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.dominio.Usuario;
-import br.natanael.android.whatsapp.infra.firebase.repositorio.usuario.callbacks.OnSucessoAoCadastrarUsuario;
+import br.natanael.android.whatsapp.infra.firebase.repositorio.usuario.callbacks.OnDataReceiveCallback;
+import br.natanael.android.whatsapp.infra.firebase.repositorio.usuario.callbacks.OnUsuarioAtualizadoCallback;
 
 public class RepositorioDeUsuarios implements  IRepositorioDeUsuarios {
 
@@ -54,7 +51,7 @@ public class RepositorioDeUsuarios implements  IRepositorioDeUsuarios {
     }
 
     @Override
-    public void atualizarUsuario(String id, Usuario usuario, final OnDataReceiveCallback callback) {
+    public void atualizarUsuario(String id, Usuario usuario, final OnUsuarioAtualizadoCallback callback) {
         DatabaseReference reference = _database.getReference("usuarios").child(id);
 
         HashMap<String, Object> usuarioMap = new HashMap<>();

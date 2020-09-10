@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.model.autenticacao;
+package br.natanael.android.whatsapp.aplicacao.model.autenticacao;
 
 public class ModeloDeCadastroDeAutenticacao {
     private String email;

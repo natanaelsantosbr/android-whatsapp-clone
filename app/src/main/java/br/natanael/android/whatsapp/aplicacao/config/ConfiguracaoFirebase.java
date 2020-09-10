@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.config;
+package br.natanael.android.whatsapp.aplicacao.config;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

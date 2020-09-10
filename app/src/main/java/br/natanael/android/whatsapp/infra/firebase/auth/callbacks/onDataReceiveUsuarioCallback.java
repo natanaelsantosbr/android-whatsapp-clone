@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.aplicacao.usuarios;
+package br.natanael.android.whatsapp.infra.firebase.auth.callbacks;
 
 import br.natanael.android.whatsapp.dominio.Usuario;
 

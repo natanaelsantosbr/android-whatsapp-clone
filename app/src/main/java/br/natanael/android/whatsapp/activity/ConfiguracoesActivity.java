@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,34 +21,27 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 import br.natanael.android.whatsapp.aplicacao.usuarios.IServicoDeGestaoDeUsuarios;
 import br.natanael.android.whatsapp.aplicacao.usuarios.ServicoDeGestaoDeUsuarios;
-import br.natanael.android.whatsapp.aplicacao.usuarios.onDataReceiveUsuarioCallback;
-import br.natanael.android.whatsapp.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.config.ConfiguracaoRequestCode;
+import br.natanael.android.whatsapp.aplicacao.usuarios.callbacks.OnSucessoAoAtualizarUsuario;
+import br.natanael.android.whatsapp.aplicacao.usuarios.callbacks.OnSucessoAoBuscarUsuario;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoRequestCode;
 import br.natanael.android.whatsapp.dominio.Usuario;
-import br.natanael.android.whatsapp.helper.Base64Custom;
-import br.natanael.android.whatsapp.helper.Permissao;
-import br.natanael.android.whatsapp.helper.UsuarioFirebase;
-import br.natanael.android.whatsapp.model.autenticacao.ModeloDeCadastroDeAutenticacao;
-import br.natanael.android.whatsapp.model.usuarios.ModeloDeAtualizacaoDeUsuario;
-import br.natanael.android.whatsapp.model.usuarios.ModeloDeCadastroDeUsuario;
+import br.natanael.android.whatsapp.aplicacao.helper.Permissao;
+import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConfiguracoesActivity extends AppCompatActivity {
@@ -60,7 +52,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
     private String identificadorUsuario;
-    private Usuario usuarioLogado;
+    private ModeloDeCadastroDeUsuario usuarioLogado;
     private EditText editTextNome;
     private ImageView imageViewNomeDoUsuario;
 
@@ -114,9 +106,11 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private void preencherVariaveis() {
 
-        if(!usuarioLogado.getFoto().isEmpty())
+        FirebaseUser usuario = UsuarioFirebase.getUsuarioAtual();
+        Uri url = usuario.getPhotoUrl();
+
+        if(url != null)
         {
-            Uri url = Uri.parse(usuarioLogado.getFoto());
             Glide.with(getApplicationContext())
                     .load(url)
                     .into(circleImageViewPerfil);
@@ -125,7 +119,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
             circleImageViewPerfil.setImageResource(R.drawable.padrao);
 
 
-        editTextNome.setText(usuarioLogado.getNome());
+        editTextNome.setText(usuario.getDisplayName());
     }
 
 
@@ -180,39 +174,15 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         imageViewNomeDoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nome  = editTextNome.getText().toString();
+                final String nome  = editTextNome.getText().toString();
                 boolean retorno = UsuarioFirebase.atualizarNomeUsuario(nome);
 
                 if(retorno){
                     {
-                        final String id = UsuarioFirebase.getIdentificadorUsuario();
-                        _servicoDeGestaoDeUsuarios.buscarUsuarioPorIdIdentificador(id, new onDataReceiveUsuarioCallback() {
-                            @Override
-                            public void onDataReceived(Usuario usuario) {
-                                //Toast.makeText(ConfiguracoesActivity.this, usuario.getNome(), Toast.LENGTH_SHORT).show();
-                                editTextNome.setText(usuario.getNome());
-                                usuario.setNome("fdp");
+                        usuarioLogado.setNome(nome);
+                        usuarioLogado.atualizar();
 
-
-
-                                _servicoDeGestaoDeUsuarios.atualizarUsuario(id, usuario, new onDataReceiveUsuarioCallback() {
-                                    @Override
-                                    public void onDataReceived(Usuario usuario) {
-                                        editTextNome.setText("2");
-                                    }
-
-                                    @Override
-                                    public void onSucesso(boolean retorno) {
-                                        editTextNome.setText("3");
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onSucesso(boolean retorno) {
-
-                            }
-                        });
+                        Toast.makeText(ConfiguracoesActivity.this, "Nome alterado com sucesso!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -300,7 +270,16 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     }
 
     private void atualizaFotoUsuario(Uri url) {
-        UsuarioFirebase.atualizarFotoUsuario(url);
+        boolean retorno =  UsuarioFirebase.atualizarFotoUsuario(url);
+
+        if(retorno)
+        {
+            usuarioLogado.setFoto(url.toString());
+            usuarioLogado.atualizar();
+
+
+        }
+
     }
 
     private void alertaValidacaoPermissao() {
