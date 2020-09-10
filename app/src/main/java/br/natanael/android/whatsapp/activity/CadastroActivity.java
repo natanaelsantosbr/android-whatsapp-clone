@@ -74,10 +74,6 @@ public class CadastroActivity extends AppCompatActivity  {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
-                                Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuario", Toast.LENGTH_SHORT).show();
-                                UsuarioFirebase.atualizarNomeUsuario((modelo.getNome()));
-                                finish();
-
                                 try {
                                     String identificador = Base64Custom.codificar(modelo.getEmail());
                                     modelo.setId(identificador);
@@ -89,6 +85,10 @@ public class CadastroActivity extends AppCompatActivity  {
                                 {
                                     e.printStackTrace();
                                 }
+
+                                Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuario", Toast.LENGTH_SHORT).show();
+                                UsuarioFirebase.atualizarNomeUsuario((modelo.getNome()));
+                                finish();
                             }
                             else
                             {

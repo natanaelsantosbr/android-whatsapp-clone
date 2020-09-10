@@ -76,9 +76,7 @@ public class ModeloDeCadastroDeUsuario {
 
     public void salvar() {
         DatabaseReference firebase = ConfiguracaoFirebase.getDatabaseReference();
-        DatabaseReference usuario = firebase.child("usuarios");
-
-        usuario.child(getId());
+        DatabaseReference usuario = firebase.child("usuarios").child(getId());
 
         usuario.setValue(this);
     }
