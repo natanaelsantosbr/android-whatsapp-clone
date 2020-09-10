@@ -44,6 +44,7 @@ import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoRequestCode;
 import br.natanael.android.whatsapp.aplicacao.helper.Base64Custom;
 import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
+import br.natanael.android.whatsapp.aplicacao.model.conversas.Conversa;
 import br.natanael.android.whatsapp.aplicacao.model.mensagens.Mensagem;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -164,6 +165,11 @@ public class ChatActivity extends AppCompatActivity {
 
             editMensagem.setText("");
 
+            //Salvar conversa
+            salvarConversa(mensagem);
+
+
+
         } else {
             Toast.makeText(ChatActivity.this, "Digite uma mensagem para enviar!", Toast.LENGTH_SHORT).show();
 
@@ -180,6 +186,16 @@ public class ChatActivity extends AppCompatActivity {
                 .child(idDestinatario)
                 .push()
                 .setValue(msg);
+    }
+
+    private void salvarConversa(Mensagem mensagem) {
+        Conversa conversaRemetente = new Conversa();
+        conversaRemetente.setIdRemetente(idUsuarioRemetente);
+        conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
+        conversaRemetente.setUltimaMensagem(mensagem.getMensagem());
+        conversaRemetente.setusuarioExibicao(usuarioDestinatario);
+
+        conversaRemetente.salvar();
     }
 
     @Override
