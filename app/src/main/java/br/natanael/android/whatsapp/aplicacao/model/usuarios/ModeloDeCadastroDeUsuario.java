@@ -2,12 +2,14 @@ package br.natanael.android.whatsapp.aplicacao.model.usuarios;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
 
-public class ModeloDeCadastroDeUsuario {
+public class ModeloDeCadastroDeUsuario implements Serializable {
     private String id;
     private String nome;
     private String email;
