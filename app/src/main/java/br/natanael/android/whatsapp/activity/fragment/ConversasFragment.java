@@ -4,6 +4,7 @@ package br.natanael.android.whatsapp.activity.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.FontRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -110,6 +111,34 @@ public class ConversasFragment extends Fragment {
         conversasRef.removeEventListener(childEventListenerConversas);
     }
 
+    public void pesquisarConversas(String texto){
+
+        texto   = texto.toLowerCase();
+
+        List<Conversa> listaConversasBusca = new ArrayList<>();
+
+        for (Conversa conversa : listaConversas)
+        {
+            String nome = conversa.getusuarioExibicao().getNome().toLowerCase();
+            String ultimaMensagem = conversa.getUltimaMensagem().toLowerCase();
+
+            if(nome.contains(texto) || ultimaMensagem.contains(texto))
+            {
+                listaConversasBusca.add(conversa);
+            }
+        }
+
+        adapter = new ConversasAdapter(listaConversasBusca, getActivity());
+        recyclerViewConversas.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void recarregarConversas() {
+        adapter = new ConversasAdapter(listaConversas, getActivity());
+        recyclerViewConversas.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     public void recuperarConversas() {
 
         childEventListenerConversas = conversasRef.addChildEventListener(new ChildEventListener() {
@@ -142,5 +171,7 @@ public class ConversasFragment extends Fragment {
             }
         });
     }
+
+
 
 }
