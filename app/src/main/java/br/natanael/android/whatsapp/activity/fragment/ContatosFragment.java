@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,11 +80,21 @@ public class ContatosFragment extends Fragment {
                     public void onItemClick(View view, int position) {
                         ModeloDeCadastroDeUsuario usuarioSelecionado = listaContatos.get(position);
 
+                        boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
-                        Intent i = new Intent(getActivity(), ChatActivity.class);
-                        i.putExtra("chatContato", usuarioSelecionado);
+                        if(cabecalho)
+                        {
+                            Intent i = new Intent(getActivity(), ChatActivity.class);
+                            i.putExtra("chatContato", usuarioSelecionado);
+                            startActivity(i);
+                        }
+                        else
+                        {
+                            Intent i = new Intent(getActivity(), ChatActivity.class);
+                            i.putExtra("chatContato", usuarioSelecionado);
+                            startActivity(i);
 
-                        startActivity(i);
+                        }
                     }
 
                     @Override
@@ -97,6 +108,12 @@ public class ContatosFragment extends Fragment {
                     }
                 }
         ));
+
+        ModeloDeCadastroDeUsuario itemGrupo = new ModeloDeCadastroDeUsuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add(itemGrupo);
 
         return view;
     }

@@ -130,10 +130,16 @@ public class MainActivity extends AppCompatActivity {
     {
         try {
             autenticacao.signOut();
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
     }
+
+
 }
