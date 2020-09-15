@@ -26,6 +26,7 @@ import java.util.List;
 
 import br.natanael.android.whatsapp.R;
 import br.natanael.android.whatsapp.activity.ChatActivity;
+import br.natanael.android.whatsapp.adapter.ContatosAdapter;
 import br.natanael.android.whatsapp.adapter.ConversasAdapter;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.helper.RecyclerItemClickListener;
@@ -140,6 +141,10 @@ public class ConversasFragment extends Fragment {
     }
 
     public void recuperarConversas() {
+        listaConversas = new ArrayList<>();
+        adapter = new ConversasAdapter(listaConversas, getActivity());
+        recyclerViewConversas.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         childEventListenerConversas = conversasRef.addChildEventListener(new ChildEventListener() {
             @Override

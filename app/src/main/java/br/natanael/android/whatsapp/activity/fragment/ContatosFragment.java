@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import br.natanael.android.whatsapp.R;
 import br.natanael.android.whatsapp.activity.ChatActivity;
 import br.natanael.android.whatsapp.activity.ConfiguracoesActivity;
+import br.natanael.android.whatsapp.activity.GrupoActivity;
 import br.natanael.android.whatsapp.adapter.ContatosAdapter;
+import br.natanael.android.whatsapp.adapter.ConversasAdapter;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.helper.RecyclerItemClickListener;
 import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
@@ -84,8 +86,7 @@ public class ContatosFragment extends Fragment {
 
                         if(cabecalho)
                         {
-                            Intent i = new Intent(getActivity(), ChatActivity.class);
-                            i.putExtra("chatContato", usuarioSelecionado);
+                            Intent i = new Intent(getActivity(), GrupoActivity.class);
                             startActivity(i);
                         }
                         else
@@ -131,6 +132,11 @@ public class ContatosFragment extends Fragment {
     }
 
     public void recuperarContatos(){
+        listaContatos = new ArrayList<>();
+        adapter = new ContatosAdapter(listaContatos, getActivity());
+        recyclerViewListaContatos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
        valueEventListenerContatos =  usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
