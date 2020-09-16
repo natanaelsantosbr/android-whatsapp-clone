@@ -218,6 +218,7 @@ public class ChatActivity extends AppCompatActivity {
                 Mensagem mensagem = dataSnapshot.getValue(Mensagem.class);
                 mensagens.add(mensagem);
                 adapter.notifyDataSetChanged();
+
                 recyclerViewMensagens.scrollToPosition(mensagens.size() -1);
             }
 

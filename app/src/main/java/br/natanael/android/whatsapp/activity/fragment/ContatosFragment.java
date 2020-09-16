@@ -110,11 +110,7 @@ public class ContatosFragment extends Fragment {
                 }
         ));
 
-        ModeloDeCadastroDeUsuario itemGrupo = new ModeloDeCadastroDeUsuario();
-        itemGrupo.setNome("Novo grupo");
-        itemGrupo.setEmail("");
 
-        listaContatos.add(itemGrupo);
 
         return view;
     }
@@ -133,6 +129,11 @@ public class ContatosFragment extends Fragment {
 
     public void recuperarContatos(){
         listaContatos = new ArrayList<>();
+        ModeloDeCadastroDeUsuario itemGrupo = new ModeloDeCadastroDeUsuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+        listaContatos.add(itemGrupo);
+
         adapter = new ContatosAdapter(listaContatos, getActivity());
         recyclerViewListaContatos.setAdapter(adapter);
         adapter.notifyDataSetChanged();
