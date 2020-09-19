@@ -22,8 +22,10 @@
             android:id="@+id/textNomeMembroSelecionado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Nome"
             android:textColor="@android:color/black"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
     </LinearLayout>

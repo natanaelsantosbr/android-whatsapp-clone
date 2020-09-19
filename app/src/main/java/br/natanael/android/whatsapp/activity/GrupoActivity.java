@@ -40,12 +40,22 @@ public class GrupoActivity extends AppCompatActivity {
     private ValueEventListener valueEventListenerMembros;
     private DatabaseReference usuariosRef;
     private FirebaseUser usuarioAtual;
+    private  Toolbar toolbar;
+
+
+    public void atualizarMembrosToolbar() {
+        int totalSelecionados = listaMembrosSelecionados.size();
+        int total  = listaMembros.size() + totalSelecionados;
+        toolbar.setSubtitle(totalSelecionados + " de " + total + " selecionados");
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grupo);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Novo grupo");
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -87,11 +97,7 @@ public class GrupoActivity extends AppCompatActivity {
 
                 listaMembrosSelecionados.add(usuarioSelecionado);
                 grupoSelecionadoAdapter.notifyDataSetChanged();
-
-
-
-
-
+                atualizarMembrosToolbar();
 
             }
 
@@ -113,6 +119,31 @@ public class GrupoActivity extends AppCompatActivity {
         recyclerMembrosSelecionados.setLayoutManager(layoutManagerHorizontal);
         recyclerMembrosSelecionados.setHasFixedSize(true);
         recyclerMembrosSelecionados.setAdapter(grupoSelecionadoAdapter);
+
+        recyclerMembrosSelecionados.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerMembrosSelecionados, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                ModeloDeCadastroDeUsuario usuario = listaMembrosSelecionados.get(position);
+                listaMembrosSelecionados.remove(usuario);
+                grupoSelecionadoAdapter.notifyDataSetChanged();
+
+                listaMembros.add(usuario);
+                contatosAdapter.notifyDataSetChanged();
+                atualizarMembrosToolbar();
+
+
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        }));
     }
 
     public void onStart() {
