@@ -47,6 +47,10 @@ public class ConversasFragment extends Fragment {
     private ChildEventListener childEventListenerConversas;
 
 
+    public List<Conversa> getConversas()
+    {
+        return this.listaConversas;
+    }
     public ConversasFragment() {    }
 
 
@@ -71,7 +75,8 @@ public class ConversasFragment extends Fragment {
         recyclerViewConversas.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewConversas, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Conversa conversaSelecionada = listaConversas.get(position);
+                List<Conversa> listaConversaAtualizadas = adapter.getConversas();
+                Conversa conversaSelecionada = listaConversaAtualizadas.get(position);
 
                 Intent i = new Intent(getActivity(), ChatActivity.class);
 

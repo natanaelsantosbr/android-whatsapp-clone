@@ -30,6 +30,11 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
         this.context = c;
     }
 
+    public List<Conversa> getConversas()
+    {
+        return this.conversas;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
