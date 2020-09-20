@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 .create()
         );
 
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        final ViewPager viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(adapter);
 
         SmartTabLayout viewPagerTab = findViewById(R.id.viewPagerTab);
@@ -83,13 +84,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                ConversasFragment fragment = (ConversasFragment) adapter.getPage(0);
+                ContatosFragment contatosFragment = (ContatosFragment)adapter.getPage(1);
 
                 if(newText != null && !newText.isEmpty())
                 {
-                    ConversasFragment fragment = (ConversasFragment) adapter.getPage(0);
                     fragment.pesquisarConversas(newText);
+                    contatosFragment.pesquisarContatos(newText);
                 }
-
+                else
+                {
+                    fragment.recarregarConversas();
+                    contatosFragment.recarregarContatos();
+                }
                 return false;
             }
         });

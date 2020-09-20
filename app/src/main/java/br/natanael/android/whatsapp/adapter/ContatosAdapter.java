@@ -30,6 +30,10 @@ public class ContatosAdapter extends RecyclerView.Adapter<ContatosAdapter.MyView
         this.context = c;
     }
 
+    public List<ModeloDeCadastroDeUsuario> getContatos() {
+        return  this.contatos;
+    }
+
     //Puxa o layout xml
     @NonNull
     @Override
