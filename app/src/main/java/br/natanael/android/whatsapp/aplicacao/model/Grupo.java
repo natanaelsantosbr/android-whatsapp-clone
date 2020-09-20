@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.helper.Base64Custom;
+import br.natanael.android.whatsapp.aplicacao.model.conversas.Conversa;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 
 public class Grupo implements Serializable {
@@ -54,5 +56,30 @@ public class Grupo implements Serializable {
 
     public void setMembros(List<ModeloDeCadastroDeUsuario> membros) {
         this.membros = membros;
+    }
+
+    public void salvar(){
+        DatabaseReference database = ConfiguracaoFirebase.getDatabaseReference();
+        DatabaseReference grupoRef = database.child("grupos");
+
+        grupoRef.child(getId()).setValue(this);
+
+        //Salvar conversa para membros do grupo
+        for (ModeloDeCadastroDeUsuario membro : getMembros())
+        {
+            String idRemetente = Base64Custom.codificar(membro.getEmail());
+            String idDestinatario = getId();
+
+            Conversa conversa = new Conversa();
+            conversa.setIdRemetente(idRemetente);
+            conversa.setIdDestinatario(idDestinatario);
+            conversa.setUltimaMensagem("");
+            conversa.setIsGrupo("true");
+            conversa.setGrupo(this);
+
+            conversa.salvar();
+
+        }
+
     }
 }

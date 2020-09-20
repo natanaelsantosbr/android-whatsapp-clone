@@ -36,6 +36,7 @@ import br.natanael.android.whatsapp.R;
 import br.natanael.android.whatsapp.adapter.GrupoSelecionadoAdapter;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoRequestCode;
+import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
 import br.natanael.android.whatsapp.aplicacao.model.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +51,7 @@ public class CadastroGrupoActivity extends AppCompatActivity {
     private CircleImageView imageGrupo;
     private StorageReference storageReference;
     private Grupo grupo;
-
+    private  FloatingActionButton fabSalvarGrupo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,20 +62,11 @@ public class CadastroGrupoActivity extends AppCompatActivity {
         toolbar.setSubtitle("Defina o nome");
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fabAvancarCadastro);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         textTotalParticipantes = findViewById(R.id.textTotalParticipantes);
         editNomeGrupo = findViewById(R.id.editNomeGrupo);
         recyclerMembrosGrupo = findViewById(R.id.recyclerMembrosGrupo);
         imageGrupo  = findViewById(R.id.imageGrupo);
+        fabSalvarGrupo = findViewById(R.id.fabSalvarGrupo);
 
         grupo = new Grupo();
 
@@ -106,6 +98,21 @@ public class CadastroGrupoActivity extends AppCompatActivity {
                 {
                     startActivityForResult(ir, ConfiguracaoRequestCode.SELECAO_GALERIA);
                 }
+            }
+        });
+
+        fabSalvarGrupo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nomeDoGrupo = editNomeGrupo.getText().toString();
+
+                //adiciona o usuario que esta logado
+                listaMembrosSelecionados.add(UsuarioFirebase.getDadosUsuarioLogado());
+
+                grupo.setMembros(listaMembrosSelecionados);
+
+                grupo.setNome(nomeDoGrupo);
+                grupo.salvar();
             }
         });
     }

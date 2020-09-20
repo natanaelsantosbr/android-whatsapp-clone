@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.io.Serializable;
 
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
+import br.natanael.android.whatsapp.aplicacao.model.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 
 public class Conversa {
@@ -15,10 +16,30 @@ public class Conversa {
     private String idDestinatario;
     private String ultimaMensagem;
     private ModeloDeCadastroDeUsuario usuarioExibicao;
+    private String isGrup;
+    private Grupo grupo;
 
     public Conversa() {
-
+        this.setIsGrupo("false");
     }
+
+    public String getIsGrup() {
+        return isGrup;
+    }
+
+    public void setIsGrupo(String isGrupo) {
+        this.isGrup = isGrupo;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+
 
     public String getIdRemetente() {
         return idRemetente;
