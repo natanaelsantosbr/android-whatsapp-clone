@@ -15,9 +15,9 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import br.natanael.android.whatsapp.R;
+import br.natanael.android.whatsapp.aplicacao.model.grupos.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.conversas.Conversa;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
-import br.natanael.android.whatsapp.dominio.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyViewHolder> {
@@ -41,20 +41,37 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Conversa conversa = conversas.get(position);
-
         holder.ultimaMensagem.setText(conversa.getUltimaMensagem());
 
-        ModeloDeCadastroDeUsuario usuario = conversa.getusuarioExibicao();
-        holder.nome.setText(usuario.getNome());
-
-        if(usuario.getFoto() != null)
+        if(conversa.getIsGrup().equals("false"))
         {
-            Uri url = Uri.parse(usuario.getFoto());
-            Glide.with(context).load(url).into(holder.foto);
+            ModeloDeCadastroDeUsuario usuario = conversa.getusuarioExibicao();
+            holder.nome.setText(usuario.getNome());
+
+            if(usuario.getFoto() != null)
+            {
+                Uri url = Uri.parse(usuario.getFoto());
+                Glide.with(context).load(url).into(holder.foto);
+            }
+            else
+            {
+                holder.foto.setImageResource(R.drawable.padrao);
+            }
         }
         else
         {
-            holder.foto.setImageResource(R.drawable.padrao);
+            Grupo grupo = conversa.getGrupo();
+            holder.nome.setText(grupo.getNome());
+
+            if(grupo.getFoto() != null)
+            {
+                Uri url = Uri.parse(grupo.getFoto());
+                Glide.with(context).load(url).into(holder.foto);
+            }
+            else
+            {
+                holder.foto.setImageResource(R.drawable.padrao);
+            }
         }
     }
 

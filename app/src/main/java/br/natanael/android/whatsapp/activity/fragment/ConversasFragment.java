@@ -71,11 +71,18 @@ public class ConversasFragment extends Fragment {
         recyclerViewConversas.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewConversas, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Conversa usuarioSelecionado = listaConversas.get(position);
-
+                Conversa conversaSelecionada = listaConversas.get(position);
 
                 Intent i = new Intent(getActivity(), ChatActivity.class);
-                i.putExtra("chatContato", usuarioSelecionado.getusuarioExibicao());
+
+                if(conversaSelecionada.getIsGrup().equals("false"))
+                {
+                    i.putExtra("chatContato", conversaSelecionada.getusuarioExibicao());
+                }
+                else
+                {
+                    i.putExtra("chatGrupo", conversaSelecionada.getGrupo());
+                }
 
                 startActivity(i);
             }

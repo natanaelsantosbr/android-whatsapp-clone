@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -28,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +35,7 @@ import br.natanael.android.whatsapp.adapter.GrupoSelecionadoAdapter;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoRequestCode;
 import br.natanael.android.whatsapp.aplicacao.helper.UsuarioFirebase;
-import br.natanael.android.whatsapp.aplicacao.model.Grupo;
+import br.natanael.android.whatsapp.aplicacao.model.grupos.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 

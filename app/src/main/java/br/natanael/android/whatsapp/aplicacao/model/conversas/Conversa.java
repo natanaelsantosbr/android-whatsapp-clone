@@ -1,13 +1,9 @@
 package br.natanael.android.whatsapp.aplicacao.model.conversas;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.database.DatabaseReference;
 
-import java.io.Serializable;
-
 import br.natanael.android.whatsapp.aplicacao.config.ConfiguracaoFirebase;
-import br.natanael.android.whatsapp.aplicacao.model.Grupo;
+import br.natanael.android.whatsapp.aplicacao.model.grupos.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
 
 public class Conversa {

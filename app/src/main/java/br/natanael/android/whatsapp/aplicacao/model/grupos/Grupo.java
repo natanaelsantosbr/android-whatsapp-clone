@@ -1,4 +1,4 @@
-package br.natanael.android.whatsapp.aplicacao.model;
+package br.natanael.android.whatsapp.aplicacao.model.grupos;
 
 import android.provider.ContactsContract;
 
