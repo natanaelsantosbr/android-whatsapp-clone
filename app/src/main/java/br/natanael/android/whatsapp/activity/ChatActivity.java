@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +50,7 @@ import br.natanael.android.whatsapp.aplicacao.model.conversas.Conversa;
 import br.natanael.android.whatsapp.aplicacao.model.grupos.Grupo;
 import br.natanael.android.whatsapp.aplicacao.model.mensagens.Mensagem;
 import br.natanael.android.whatsapp.aplicacao.model.usuarios.ModeloDeCadastroDeUsuario;
+import br.natanael.android.whatsapp.dominio.Usuario;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
@@ -179,23 +182,40 @@ public class ChatActivity extends AppCompatActivity {
         String textoMensagem = editMensagem.getText().toString();
 
         if (!textoMensagem.isEmpty()) {
-            Mensagem mensagem = new Mensagem();
-            mensagem.setIdUsuario(idUsuarioRemetente);
-            mensagem.setMensagem(textoMensagem);
 
-            //Salvar mensagem para o remetente
-            salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+            if(usuarioDestinatario != null)
+            {
+                Mensagem mensagem = new Mensagem();
+                mensagem.setIdUsuario(idUsuarioRemetente);
+                mensagem.setMensagem(textoMensagem);
 
-            //Salvar mensagem para o destinatario
-            salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+                //Salvar mensagem para o remetente
+                salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
 
-            editMensagem.setText("");
+                //Salvar mensagem para o destinatario
+                salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
 
-            //Salvar conversa
-            salvarConversa(mensagem);
+                editMensagem.setText("");
 
+                //Salvar conversa
+                salvarConversa(mensagem, false) ;
+            }
+            else
+            {
+                for (ModeloDeCadastroDeUsuario membro : grupo.getMembros())
+                {
+                    String idRemetenteGrupo = Base64Custom.codificar(membro.getEmail());
+                    String idUsuarioLogadoGrupo = UsuarioFirebase.getIdentificadorUsuario();
 
+                    Mensagem mensagem = new Mensagem();
+                    mensagem.setIdUsuario(idUsuarioLogadoGrupo);
+                    mensagem.setMensagem(textoMensagem);
 
+                    salvarMensagem(idRemetenteGrupo, idUsuarioDestinatario,  mensagem);
+
+                    salvarConversa(mensagem, true);
+                }
+            }
         } else {
             Toast.makeText(ChatActivity.this, "Digite uma mensagem para enviar!", Toast.LENGTH_SHORT).show();
 
@@ -214,12 +234,24 @@ public class ChatActivity extends AppCompatActivity {
                 .setValue(msg);
     }
 
-    private void salvarConversa(Mensagem mensagem) {
+    private void salvarConversa(Mensagem mensagem, boolean isGroup)
+    {
         Conversa conversaRemetente = new Conversa();
         conversaRemetente.setIdRemetente(idUsuarioRemetente);
         conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
         conversaRemetente.setUltimaMensagem(mensagem.getMensagem());
-        conversaRemetente.setusuarioExibicao(usuarioDestinatario);
+
+
+        if(!isGroup)
+        {
+            conversaRemetente.setusuarioExibicao(usuarioDestinatario);
+            conversaRemetente.setIsGrupo("false");
+        }
+        else
+        {
+            conversaRemetente.setIsGrupo("true");
+            conversaRemetente.setGrupo(grupo);
+        }
 
         conversaRemetente.salvar();
     }
