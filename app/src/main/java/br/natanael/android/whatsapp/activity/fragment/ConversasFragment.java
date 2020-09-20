@@ -166,6 +166,8 @@ public class ConversasFragment extends Fragment {
     }
 
     public void recuperarConversas() {
+        listaConversas.clear();
+
         listaConversas = new ArrayList<>();
         adapter = new ConversasAdapter(listaConversas, getActivity());
         recyclerViewConversas.setAdapter(adapter);

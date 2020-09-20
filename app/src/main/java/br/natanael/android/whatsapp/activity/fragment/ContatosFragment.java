@@ -131,6 +131,8 @@ public class ContatosFragment extends Fragment {
     }
 
     public void recuperarContatos(){
+        listaContatos.clear();
+
         listaContatos = new ArrayList<>();
         ModeloDeCadastroDeUsuario itemGrupo = new ModeloDeCadastroDeUsuario();
         itemGrupo.setNome("Novo grupo");
