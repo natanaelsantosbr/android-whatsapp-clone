@@ -127,12 +127,25 @@ public class ConversasFragment extends Fragment {
 
         for (Conversa conversa : listaConversas)
         {
-            String nome = conversa.getusuarioExibicao().getNome().toLowerCase();
-            String ultimaMensagem = conversa.getUltimaMensagem().toLowerCase();
-
-            if(nome.contains(texto) || ultimaMensagem.contains(texto))
+            if(conversa.getusuarioExibicao() != null)
             {
-                listaConversasBusca.add(conversa);
+                String nome = conversa.getusuarioExibicao().getNome().toLowerCase();
+                String ultimaMensagem = conversa.getUltimaMensagem().toLowerCase();
+
+                if(nome.contains(texto) || ultimaMensagem.contains(texto))
+                {
+                    listaConversasBusca.add(conversa);
+                }
+            }
+            else
+            {
+                String nome = conversa.getGrupo().getNome().toLowerCase();
+                String ultimaMensagem = conversa.getUltimaMensagem().toLowerCase();
+
+                if(nome.contains(texto) || ultimaMensagem.contains(texto))
+                {
+                    listaConversasBusca.add(conversa);
+                }
             }
         }
 
