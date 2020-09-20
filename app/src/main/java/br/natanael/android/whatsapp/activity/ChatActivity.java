@@ -195,10 +195,15 @@ public class ChatActivity extends AppCompatActivity {
                 //Salvar mensagem para o destinatario
                 salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
 
-                editMensagem.setText("");
 
-                //Salvar conversa
-                salvarConversa(mensagem, false) ;
+
+                //Salvar conversa remetente
+                salvarConversa(idUsuarioRemetente, idUsuarioDestinatario, usuarioDestinatario,  mensagem, false) ;
+
+
+                //Salvar conversa destinatario
+                ModeloDeCadastroDeUsuario usuarioRemetente = UsuarioFirebase.getDadosUsuarioLogado();
+                salvarConversa(idUsuarioDestinatario, idUsuarioRemetente, usuarioRemetente, mensagem, false );
             }
             else
             {
@@ -210,12 +215,16 @@ public class ChatActivity extends AppCompatActivity {
                     Mensagem mensagem = new Mensagem();
                     mensagem.setIdUsuario(idUsuarioLogadoGrupo);
                     mensagem.setMensagem(textoMensagem);
+                    mensagem.setNome(UsuarioFirebase.getDadosUsuarioLogado().getNome());
 
                     salvarMensagem(idRemetenteGrupo, idUsuarioDestinatario,  mensagem);
 
-                    salvarConversa(mensagem, true);
+                    salvarConversa(idRemetenteGrupo,idUsuarioDestinatario, usuarioDestinatario,  mensagem, true);
                 }
             }
+
+            editMensagem.setText("");
+
         } else {
             Toast.makeText(ChatActivity.this, "Digite uma mensagem para enviar!", Toast.LENGTH_SHORT).show();
 
@@ -234,17 +243,17 @@ public class ChatActivity extends AppCompatActivity {
                 .setValue(msg);
     }
 
-    private void salvarConversa(Mensagem mensagem, boolean isGroup)
+    private void salvarConversa(String idRemetente, String idDestinatario, ModeloDeCadastroDeUsuario usuarioExibicao, Mensagem mensagem, boolean isGroup)
     {
         Conversa conversaRemetente = new Conversa();
-        conversaRemetente.setIdRemetente(idUsuarioRemetente);
-        conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
+        conversaRemetente.setIdRemetente(idRemetente);
+        conversaRemetente.setIdDestinatario(idDestinatario);
         conversaRemetente.setUltimaMensagem(mensagem.getMensagem());
 
 
         if(!isGroup)
         {
-            conversaRemetente.setusuarioExibicao(usuarioDestinatario);
+            conversaRemetente.setusuarioExibicao(usuarioExibicao);
             conversaRemetente.setIsGrupo("false");
         }
         else

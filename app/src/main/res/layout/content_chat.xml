@@ -53,8 +53,6 @@
                 android:id="@+id/imageCamera"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="-25dp"
-                android:layout_weight="1"
                 app:srcCompat="@drawable/ic_camera_cinza_24dp" />
         </LinearLayout>
 
