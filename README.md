@@ -6,6 +6,8 @@ Clonar as principais ferramentas do App Whatsapp
 Veja as principais funcionalidade do app
 
 <ul>
+<li>Criar Grupos</li>
+<li>Conversar em tempo real com seus contatos</li>
 <li>Cadastrar e Autenticar</li>
 <li>Permissões de Tirar Foto e Selecionar Foto</li>
 <li>Firebase Auth, Firebase Storage</li>
