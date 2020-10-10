@@ -15,6 +15,12 @@
         android:orientation="vertical"
         android:padding="10dp">
 
+        <ProgressBar
+            android:id="@+id/progressToolbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

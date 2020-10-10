@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -59,6 +60,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
     private IServicoDeGestaoDeUsuarios _servicoDeGestaoDeUsuarios;
 
+    private ProgressBar progressFoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,8 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         circleImageViewPerfil = findViewById(R.id.circleImageViewFotoPerfil);
         editTextNome = findViewById(R.id.editTextNome);
         imageViewNomeDoUsuario = findViewById(R.id.imageViewNomeDoUsuario);
+        progressFoto = findViewById(R.id.progressFoto);
+        progressFoto.setVisibility(View.GONE);
     }
 
     private void criarPermissoes() {
@@ -206,7 +210,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        progressFoto.setVisibility(View.VISIBLE);
         if(resultCode == RESULT_OK)
         {
             Bitmap imagem = null;
@@ -242,6 +246,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(ConfiguracoesActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                            progressFoto.setVisibility(View.GONE);
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -256,6 +261,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                                     atualizaFotoUsuario(url);
 
                                     Toast.makeText(ConfiguracoesActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                                    progressFoto.setVisibility(View.GONE);
                                 }
                             });
                         }

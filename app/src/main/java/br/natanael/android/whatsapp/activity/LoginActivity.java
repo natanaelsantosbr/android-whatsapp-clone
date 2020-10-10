@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText campoSenha;
 
     private FirebaseAuth autenticacao;
+
+    private ProgressBar progressLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +37,13 @@ public class LoginActivity extends AppCompatActivity {
 
         campoEmail = findViewById(R.id.editLoginEmail);
         campoSenha = findViewById(R.id.editLoginSenha);
+        progressLogin = findViewById(R.id.progressLogin);
+        progressLogin.setVisibility(View.GONE);
 
     }
 
     public void logarUsuario(View view) {
+        progressLogin.setVisibility(View.VISIBLE);
         String email = campoEmail.getText().toString();
         String senha = campoSenha.getText().toString();
 
@@ -52,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful())
                         {
                             String usuario = autenticacao.getCurrentUser().getEmail();
+                            progressLogin.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this,usuario, Toast.LENGTH_SHORT).show();
                             abrirTelaPrincipal();
                         }
@@ -77,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+                            progressLogin.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this, excecao, Toast.LENGTH_SHORT).show();
 
                         }

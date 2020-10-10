@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +36,8 @@ public class CadastroActivity extends AppCompatActivity  {
 
     private IServicoDeGestaoDeUsuarios _servicoDeGestaoDeUsuarios;
 
+    private ProgressBar progressCadastro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,8 @@ public class CadastroActivity extends AppCompatActivity  {
         campoNome = findViewById(R.id.editNome);
         campoEmail = findViewById(R.id.editLoginEmail);
         campoSenha = findViewById(R.id.editLoginSenha);
+        progressCadastro  = findViewById(R.id.progressCadastro);
+        progressCadastro.setVisibility(View.GONE);
     }
 
     private void inicializarVariaveis() {
@@ -56,6 +61,8 @@ public class CadastroActivity extends AppCompatActivity  {
 
     public void cadastrarUsuario(View view)
     {
+        progressCadastro.setVisibility(View.VISIBLE);
+
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
         String textoNome = campoNome.getText().toString();
@@ -88,6 +95,7 @@ public class CadastroActivity extends AppCompatActivity  {
 
                                 Toast.makeText(CadastroActivity.this, "Sucesso ao cadastrar usuario", Toast.LENGTH_SHORT).show();
                                 UsuarioFirebase.atualizarNomeUsuario((modelo.getNome()));
+                                progressCadastro.setVisibility(View.GONE);
                                 finish();
                             }
                             else
@@ -97,6 +105,7 @@ public class CadastroActivity extends AppCompatActivity  {
                                 excecao = getString(task);
 
                                 Toast.makeText(CadastroActivity.this, excecao, Toast.LENGTH_SHORT).show();
+                                progressCadastro.setVisibility(View.GONE);
 
                             }
                         }

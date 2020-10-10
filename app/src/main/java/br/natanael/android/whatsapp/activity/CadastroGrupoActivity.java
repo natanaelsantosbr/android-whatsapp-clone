@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,9 @@ public class CadastroGrupoActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private Grupo grupo;
     private  FloatingActionButton fabSalvarGrupo;
+
+    private ProgressBar progressToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,9 @@ public class CadastroGrupoActivity extends AppCompatActivity {
         recyclerMembrosGrupo = findViewById(R.id.recyclerMembrosGrupo);
         imageGrupo  = findViewById(R.id.imageGrupo);
         fabSalvarGrupo = findViewById(R.id.fabSalvarGrupo);
+        progressToolbar = findViewById(R.id.progressToolbar);
+        progressToolbar.setVisibility(View.GONE);
+
 
         grupo = new Grupo();
 
@@ -121,7 +128,7 @@ public class CadastroGrupoActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        progressToolbar.setVisibility(View.VISIBLE);
         if(resultCode == RESULT_OK)
         {
             Bitmap imagem = null;
@@ -151,6 +158,7 @@ public class CadastroGrupoActivity extends AppCompatActivity {
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressToolbar.setVisibility(View.GONE);
                             Toast.makeText(CadastroGrupoActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -166,7 +174,7 @@ public class CadastroGrupoActivity extends AppCompatActivity {
                                     grupo.setFoto(url.toString());
 
                                     //atualizaFotoUsuario(url);
-
+                                    progressToolbar.setVisibility(View.GONE);
                                     Toast.makeText(CadastroGrupoActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
                                 }
                             });
